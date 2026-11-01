@@ -21,9 +21,10 @@ build/
 # packaging output
 mcp-server/dist/
 
-# env
+# env / credentials
 .env
 .env.local
+.secrets/
 
 # editor / os
 .DS_Store
