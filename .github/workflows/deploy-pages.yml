@@ -1,8 +1,8 @@
 name: Deploy to GitHub Pages
 
+# 生产站点部署在 Cloudflare Pages（见 scripts/publish.ps1），
+# 这个工作流仅作为 GitHub Pages 备用方案，手动触发，避免每次 push 都红叉。
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
