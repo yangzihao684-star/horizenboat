@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --color-canvas: var(--hb-canvas);
+  --color-surface: var(--hb-surface);
+  --color-surface-2: var(--hb-surface-2);
+  --color-line: var(--hb-line);
+  --color-line-strong: var(--hb-line-strong);
+  --color-fg: var(--hb-fg);
+  --color-muted: var(--hb-muted);
+  --color-faint: var(--hb-faint);
+  --color-accent: var(--hb-accent);
+  --color-accent-soft: var(--hb-accent-soft);
+  --color-danger: var(--hb-danger);
+  --color-danger-soft: var(--hb-danger-soft);
+  --color-ok: var(--hb-ok);
+
+  --font-sans: "Inter Variable", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC", "Noto Sans SC",
+    sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, "Cascadia Code", Consolas,
+    "Liberation Mono", monospace;
+
+  --radius-card: 0.75rem;
+}
+
+:root {
+  --hb-canvas: #0a0a0b;
+  --hb-surface: #101013;
+  --hb-surface-2: #17171b;
+  --hb-line: rgba(255, 255, 255, 0.075);
+  --hb-line-strong: rgba(255, 255, 255, 0.145);
+  --hb-fg: #ededf0;
+  --hb-muted: #a0a0aa;
+  --hb-faint: #6f6f7b;
+  --hb-accent: #e0a458;
+  --hb-accent-soft: rgba(224, 164, 88, 0.14);
+  --hb-danger: #f26872;
+  --hb-danger-soft: rgba(242, 104, 114, 0.12);
+  --hb-ok: #5ac8a0;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --hb-canvas: #fbfbf9;
+  --hb-surface: #ffffff;
+  --hb-surface-2: #f3f3ef;
+  --hb-line: rgba(20, 20, 24, 0.09);
+  --hb-line-strong: rgba(20, 20, 24, 0.18);
+  --hb-fg: #16161a;
+  --hb-muted: #55555f;
+  --hb-faint: #85858f;
+  --hb-accent: #a8631a;
+  --hb-accent-soft: rgba(168, 99, 26, 0.1);
+  --hb-danger: #c02f3d;
+  --hb-danger-soft: rgba(192, 47, 61, 0.08);
+  --hb-ok: #0f7a58;
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: var(--hb-line-strong) transparent;
+  }
+
+  body {
+    background-color: var(--hb-canvas);
+    color: var(--hb-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--hb-accent);
+    color: #0a0a0b;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--hb-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--hb-line-strong);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+}
+
+@layer components {
+  /* Hairline "document" frame used by the page shell. */
+  .shell {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    border-inline: 1px solid var(--hb-line);
+  }
+
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--hb-faint);
+  }
+
+  .card {
+    background-color: var(--hb-surface);
+    border: 1px solid var(--hb-line);
+    border-radius: var(--radius-card);
+  }
+
+  .hairline-top {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--hb-line-strong) 20%,
+      var(--hb-accent) 50%,
+      var(--hb-line-strong) 80%,
+      transparent
+    );
+    height: 1px;
+  }
+}
+
+@utility text-pretty {
+  text-wrap: pretty;
+}
+
+@keyframes hb-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hb-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.anim-fade {
+  animation: hb-fade-in 140ms ease-out both;
+}
+
+.anim-pop {
+  animation: hb-pop-in 150ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade,
+  .anim-pop {
+    animation: none;
+  }
+  * {
+    transition-duration: 1ms !important;
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-11-01T00:00:00Z",
+  "base": "/api/v1",
+  "work_endpoint": "/api/v1/works/{work_id}.json",
+  "license": "设定摘要以 CC BY-NC-SA 4.0 授权；原著正文版权归原作者所有。",
+  "counts": { "works": 2, "characters": 8, "timelines": 6, "hooks": 6 },
+  "tags": [
+    { "tag": "西幻", "count": 1 },
+    { "tag": "克苏鲁", "count": 1 },
+    { "tag": "蒸汽朋克", "count": 1 },
+    { "tag": "序列体系", "count": 1 },
+    { "tag": "维多利亚", "count": 1 },
+    { "tag": "赛博修仙", "count": 1 },
+    { "tag": "反乌托邦", "count": 1 },
+    { "tag": "工程理性", "count": 1 },
+    { "tag": "原创架空", "count": 1 },
+    { "tag": "群像", "count": 2 }
+  ],
+  "works": [
+    {
+      "id": "lord-of-the-mysteries",
+      "title": "诡秘之主",
+      "title_en": "Lord of the Mysteries",
+      "type": "fanfic",
+      "type_label": "二创防吃书",
+      "category": "西方玄幻 · 蒸汽朋克 · 克苏鲁",
+      "author": "爱潜水的乌贼",
+      "tags": ["西幻", "克苏鲁", "蒸汽朋克", "序列体系", "维多利亚", "群像"],
+      "summary": "蒸汽与机械的年代，22 条神之途径，魔药必须被「扮演」而不是被「吸收」。本包把 1349–1351 年的认知边界、非凡特性三定律与四张角色钢印钉死：角色可以说错话，但不能知道不该知道的事。",
+      "characters_list": [
+        { "id": "klein", "name": "克莱恩·莫雷蒂", "name_en": "Klein Moretti", "aliases": ["愚者", "世界", "夏洛克"], "role": "主角", "pathway": "愚者途径 · 序列 9 占卜家起" },
+        { "id": "audrey", "name": "奥黛丽·霍尔", "name_en": "Audrey Hall", "aliases": ["正义"], "role": "正义", "pathway": "观众途径 · 序列 9 观众" },
+        { "id": "leonard", "name": "伦纳德·米切尔", "name_en": "Leonard Mitchell", "aliases": ["星星", "诗人同学"], "role": "星星", "pathway": "黑夜途径 · 序列 8 午夜诗人" },
+        { "id": "alger", "name": "阿尔杰·威尔逊", "name_en": "Alger Wilson", "aliases": ["倒吊人"], "role": "倒吊人", "pathway": "水手途径 · 序列 8 暴怒之民" }
+      ],
+      "timelines_list": [
+        { "id": "t1", "label": "廷根篇", "range": "1349 年秋 — 1350 年春" },
+        { "id": "t2", "label": "贝克兰德篇", "range": "1350 年春 — 1351 年夏" },
+        { "id": "t3", "label": "沉眠之后", "range": "1351 年秋 — 1368 年" }
+      ],
+      "hooks_list": [
+        { "hook_id": "lm-h1", "title": "如果扮演法被公开" },
+        { "hook_id": "lm-h2", "title": "如果克莱恩没有穿越" },
+        { "hook_id": "lm-h3", "title": "如果一位正神在城里失控" }
+      ],
+      "search_terms": [
+        "愚者", "塔罗会", "扮演法", "非凡特性", "失控", "封印物", "值夜者", "魔药",
+        "序列", "灰雾", "灵界", "污染", "邓恩", "正义", "倒吊人", "星星", "诗人同学",
+        "贝克兰德", "廷根", "罗塞尔", "亵渎石板", "诡法师", "占卜家", "小丑", "无面人"
+      ],
+      "stats": { "characters": 4, "timelines": 3, "hooks": 3, "laws": 6 },
+      "difficulty": "high",
+      "spoiler_warning": true,
+      "recommended_timeline": "t2",
+      "updated_at": "2026-11-01"
+    },
+    {
+      "id": "carbon-tribulation",
+      "title": "碳基天劫",
+      "title_en": "Carbon Tribulation",
+      "type": "original",
+      "type_label": "原创架空",
+      "category": "赛博修仙 · 反乌托邦 · 工程理性",
+      "author": "HorizonBoat 原创设定组",
+      "tags": ["赛博修仙", "反乌托邦", "工程理性", "原创架空", "群像"],
+      "summary": "灵气枯竭之后，修士们发现「灵」本质是可计算的。于是宗门变成公司，丹药变成编译器，飞升变成上传，天劫变成一段没人维护的共识校验脚本。陆知白在外包工位上发现：这段脚本的判定，从来没验证过「该不该存在」。",
+      "characters_list": [
+        { "id": "lu-zhibai", "name": "陆知白", "name_en": "Lu Zhibai", "aliases": ["陆工", "第 412 号"], "role": "主角", "pathway": "炼气三层（第 412 号工位）" },
+        { "id": "zhou-wujiu", "name": "周无咎", "name_en": "Zhou Wujiu", "aliases": ["周厂长", "廷尉"], "role": "太阿集团廷尉", "pathway": "元婴后期（账面）" },
+        { "id": "bai-ke", "name": "白珂", "name_en": "Bai Ke", "aliases": ["白姐"], "role": "灰市剑修", "pathway": "金丹初期（曾金丹后期）" },
+        { "id": "jie-lei", "name": "劫雷·小七", "name_en": "Tribulation Agent Seven", "aliases": ["小七", "客服"], "role": "天劫客服", "pathway": "无（自动化进程）" }
+      ],
+      "timelines_list": [
+        { "id": "t1", "label": "开盘期", "range": "第三次灵气冲泡 · 第 7 年" },
+        { "id": "t2", "label": "第一次天劫风暴", "range": "第 8 年 · 三月初七 — 四月十三" },
+        { "id": "t3", "label": "结算日之后", "range": "第 8 年 四月十四 起" }
+      ],
+      "hooks_list": [
+        { "hook_id": "ct-h1", "title": "如果天劫一直在等一个「不通过」的答案" },
+        { "hook_id": "ct-h2", "title": "如果凡人的香火可以被挤兑" },
+        { "hook_id": "ct-h3", "title": "如果周厂长把自己格式化" }
+      ],
+      "search_terms": [
+        "算力", "天劫", "飞升", "上传", "灵气", "众包", "香火", "因果账本", "业火",
+        "外包", "工位", "寿元", "修补丁", "可复现", "共识", "节点", "灰市", "旧天庭"
+      ],
+      "stats": { "characters": 4, "timelines": 3, "hooks": 3, "laws": 6 },
+      "difficulty": "medium",
+      "spoiler_warning": false,
+      "recommended_timeline": "t2",
+      "updated_at": "2026-11-01"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+# deps
+node_modules/
+.pnpm-store/
+
+# build output
+web/dist/
+dist/
+
+# local verification artifacts
+.screenshots/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+.venvtest/
+venv/
+build/
+*.egg-info/
+
+# packaging output
+mcp-server/dist/
+
+# env
+.env
+.env.local
+
+# editor / os
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

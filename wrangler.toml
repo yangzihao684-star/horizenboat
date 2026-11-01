@@ -1,0 +1,6 @@
+# Cloudflare Pages 部署配置（wrangler pages deploy 时读取）
+name = "horizonboat"
+pages_build_output_dir = "web/dist"
+compatibility_date = "2026-01-01"
+
+# 静态资源，无 Functions、无数据库。

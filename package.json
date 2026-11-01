@@ -1,0 +1,16 @@
+{
+  "name": "horizonboat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HorizonBoat · 防 OOC 设定库与世界观发散引擎（静态站点 + MCP Server）",
+  "scripts": {
+    "dev": "npm --prefix web run dev",
+    "build": "npm --prefix web run build",
+    "preview": "npm --prefix web run preview -- --port 4318",
+    "typecheck": "npm --prefix web run typecheck",
+    "check:api": "npm --prefix web run check:api",
+    "mcp": "python mcp-server/server.py",
+    "mcp:selftest": "python mcp-server/server.py --selftest",
+    "mcp:smoke": "python mcp-server/smoke_test.py"
+  }
+}
