@@ -74,9 +74,39 @@ function Find-Value([string[]]$Lines, [string]$Kind) {
   return ''
 }
 
+function Test-CloudflareMcp([string]$Token) {
+  if (-not $Token) { Write-Host 'mcp       : no token'; return }
+  $body = '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2026-07-28","capabilities":{},"clientInfo":{"name":"dsh-probe","version":"1"}}}'
+  if (-not (Get-Command curl.exe -ErrorAction SilentlyContinue)) {
+    Write-Host 'mcp       : curl.exe not found, skipped'
+    return
+  }
+  $out = ''
+  $previous = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $out = & curl.exe -sS -A 'dsh-mcp-probe/1.0' -X POST 'https://mcp.cloudflare.com/mcp' -H ('Authorization: Bearer ' + $Token) -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -d $body --max-time 30 | Out-String
+  } catch {
+    $out = 'curl failed: ' + $_.Exception.Message
+  } finally {
+    $ErrorActionPreference = $previous
+  }
+  if ($out -match 'insufficient_scope') {
+    Write-Host 'mcp       : TOKEN NEEDS SCOPE -> add "User: User Details: Read" or "Account: Account Settings: Read"'
+  } elseif ($out -match 'browser_signature_banned') {
+    Write-Host 'mcp       : blocked by WAF error 1010 (retry with a normal User-Agent)'
+  } elseif ($out -match '"serverInfo"|"protocolVersion"') {
+    Write-Host 'mcp       : OK (initialize succeeded)'
+  } else {
+    $trim = $out.Trim()
+    if ($trim.Length -gt 160) { $trim = $trim.Substring(0, 160) }
+    Write-Host ('mcp       : unexpected response -> ' + $trim)
+  }
+}
+
 # ---------------------------------------------------------------- status
 if ($Status) {
-  $lines = Read-Profile -split "\r?\n"
+  $lines = @((Read-Profile) -split "\r?\n")
   $gv = Find-Value $lines 'github'
   $fv = Find-Value $lines 'cloudflare'
   Write-Host ('profile   : ' + $ProfilePath)
@@ -87,7 +117,7 @@ if ($Status) {
 # ---------------------------------------------------------------- verify
 if ($Verify) {
   $t = if ($GitHubToken) { $GitHubToken } else { Read-Secret 'github.txt' }
-  if (-not $t) { $t = Find-Value (Read-Profile -split "\r?\n") 'github' }
+  if (-not $t) { $t = Find-Value @((Read-Profile) -split "\r?\n") 'github' }
   if ($t -and $t -ne $GhPlaceholder) {
     try {
       $me = Invoke-RestMethod -Uri 'https://api.github.com/user' -Headers @{ Authorization = 'Bearer ' + $t; 'User-Agent' = 'horizonboat' } -TimeoutSec 20
@@ -99,12 +129,13 @@ if ($Verify) {
   } else { Write-Host 'github    : no token to verify' }
 
   $t = if ($CloudflareToken) { $CloudflareToken } else { Read-Secret 'cloudflare.txt' }
-  if (-not $t) { $t = Find-Value (Read-Profile -split "\r?\n") 'cloudflare' }
+  if (-not $t) { $t = Find-Value @((Read-Profile) -split "\r?\n") 'cloudflare' }
   if ($t -and $t -ne $CfPlaceholder) {
     try {
       $acc = Invoke-RestMethod -Uri 'https://api.cloudflare.com/client/v4/accounts' -Headers @{ Authorization = 'Bearer ' + $t } -TimeoutSec 20
       $names = @($acc.result | ForEach-Object { $_.name }) -join ', '
       Write-Host ('cloudflare: OK, ' + @($acc.result).Count + ' account(s): ' + $names)
+      Test-CloudflareMcp $t
     } catch {
       $code = try { [int]$_.Exception.Response.StatusCode } catch { 0 }
       Write-Host ('cloudflare: FAILED (HTTP ' + $code + ') - token invalid or lacks Account read')
