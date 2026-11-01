@@ -15,7 +15,7 @@
   pwsh scripts/publish.ps1 -Step cloudflare
 #>
 param(
-  [ValidateSet('status', 'github', 'cloudflare', 'pypi', 'zones')]
+  [ValidateSet('status', 'github', 'cloudflare', 'pypi', 'zones', 'dns')]
   [string]$Step = 'status',
   [string]$RepoName = 'horizenboat',
   [string]$ProjectName = 'horizenboat',
@@ -260,10 +260,72 @@ function Step-Zones {
   }
 }
 
+function Step-Dns {
+  $lines = @(Read-Secret 'cloudflare.txt')
+  if ($lines.Count -eq 0) { throw 'missing .secrets/cloudflare.txt' }
+  if ($lines.Count -ge 2) { $accountId = $lines[0]; $cfToken = $lines[1] } else { $accountId = $null; $cfToken = $lines[0] }
+  $headers = @{ Authorization = 'Bearer ' + $cfToken }
+  $target = $ProjectName + '.pages.dev'
+
+  $zones = Invoke-RestMethod -Uri 'https://api.cloudflare.com/client/v4/zones?per_page=100' -Headers $headers
+  $zone = @($zones.result) | Where-Object { $Domain -eq $_.name -or $Domain.EndsWith('.' + $_.name) } | Select-Object -First 1
+  if (-not $zone) {
+    Write-Host ('zone      : NOT VISIBLE - add Zone:Read + DNS:Edit to the token (Zone resources: All zones)')
+    return
+  }
+  Write-Host ('zone      : ' + $zone.name + ' [' + $zone.status + '] ' + $zone.id)
+
+  foreach ($pair in @(@('@', $Domain), @('www', ('www.' + $Domain)))) {
+    $route = $pair[0]
+    $fqdn = $pair[1]
+    Write-Host ''
+    Write-Host ('--- ' + $fqdn)
+
+    $existing = Invoke-RestMethod -Uri ('https://api.cloudflare.com/client/v4/zones/' + $zone.id + '/dns_records?name=' + $fqdn) -Headers $headers
+    $keep = @()
+    foreach ($r in @($existing.result)) {
+      if ($r.type -eq 'CNAME' -and $r.content -eq $target) {
+        Write-Host ('    keep    : CNAME -> ' + $r.content)
+        $keep += $r
+        continue
+      }
+      # 只动 web 记录；MX / TXT / CAA / SRV 等一律不碰（否则会打断邮件路由）
+      if (@('A', 'AAAA', 'CNAME') -notcontains $r.type) {
+        Write-Host ('    skip    : ' + $r.type + ' (not a web record, left untouched)')
+        continue
+      }
+      if ($DryRun) {
+        Write-Host ('    [dry-run] delete ' + $r.type + ' -> ' + $r.content)
+        continue
+      }
+      Invoke-RestMethod -Uri ('https://api.cloudflare.com/client/v4/zones/' + $zone.id + '/dns_records/' + $r.id) -Method Delete -Headers $headers | Out-Null
+      Write-Host ('    deleted : ' + $r.type + ' -> ' + $r.content)
+    }
+
+    if ($keep.Count -gt 0) { continue }
+
+    $body = @{ type = 'CNAME'; name = $route; content = $target; proxied = $true; ttl = 1 } | ConvertTo-Json
+    if ($DryRun) {
+      Write-Host ('    [dry-run] create CNAME ' + $route + ' -> ' + $target + ' (proxied)')
+      continue
+    }
+    try {
+      $created = Invoke-RestMethod -Uri ('https://api.cloudflare.com/client/v4/zones/' + $zone.id + '/dns_records') -Method Post -Headers $headers -Body $body -ContentType 'application/json'
+      Write-Host ('    created : CNAME ' + $route + ' -> ' + $target + ' (proxied)')
+    } catch {
+      Write-Host ('    FAILED  : ' + $_.Exception.Message)
+    }
+  }
+
+  Write-Host ''
+  Write-Host ('next      : Pages -> ' + $ProjectName + ' -> Custom domains, confirm ' + $Domain + ' flips to active')
+}
+
 switch ($Step) {
   'status'     { Show-Status }
   'github'     { Step-GitHub }
   'cloudflare' { Step-Cloudflare }
   'pypi'       { Step-PyPI }
   'zones'      { Step-Zones }
+  'dns'        { Step-Dns }
 }
