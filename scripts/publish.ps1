@@ -21,6 +21,7 @@ param(
   [string]$ProjectName = 'horizonboat',
   [string]$Domain = 'horizonboat.online',
   [switch]$Private,
+  [switch]$Force,
   [switch]$DryRun
 )
 
@@ -109,8 +110,15 @@ function Step-GitHub {
 
   # 用一次性 extraheader 推，避免把 token 写进 .git/config
   $basic = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes('x-access-token:' + $token))
-  git -C $Root -c http.extraheader=('AUTHORIZATION: basic ' + $basic) push -u origin HEAD:main
-  if ($LASTEXITCODE -ne 0) { throw 'git push failed (token needs Contents: Read and write + Workflows: Read and write)' }
+  $pushArgs = @('-C', $Root, '-c', ('http.extraheader=AUTHORIZATION: basic ' + $basic), 'push', '-u', 'origin', 'HEAD:main')
+  if ($Force) {
+    $pushArgs += '--force'
+    Write-Host '  force     : enabled, remote history will be replaced'
+  }
+  & git @pushArgs
+  if ($LASTEXITCODE -ne 0) {
+    throw 'git push failed: PAT 缺少 Contents/Workflows 读写，或远端已有无关历史（加 -Force）'
+  }
   Write-Host ('  pushed    : ' + $remoteUrl)
 }
 
