@@ -113,11 +113,26 @@ class CanonStore:
             return await self._load_http(target)
         return self._load_file(target)
 
+    async def _request(self, target: str, headers: dict[str, str]) -> Any:
+        """发一次 GET；对 NO_PROXY 解析失败的机器做一次无代理重试。
+
+        某些环境的 NO_PROXY 里有 "[::1]" 这种带方括号的条目，httpx 解析时会把它
+        当成非法端口抛 InvalidURL("Invalid port: ':1]'")。这不是用户配置错误能
+        一句话说清的，所以这里直接绕开环境代理重试一次，而不是让整个工具不可用。
+        """
+        try:
+            async with httpx.AsyncClient(timeout=self.timeout, follow_redirects=True) as client:
+                return await client.get(target, headers=headers)
+        except httpx.InvalidURL:
+            async with httpx.AsyncClient(
+                timeout=self.timeout, follow_redirects=True, trust_env=False
+            ) as client:
+                return await client.get(target, headers=headers)
+
     async def _load_http(self, target: str) -> dict[str, Any]:
         headers = {"accept": "application/json", "user-agent": "horizonboat-mcp/" + SERVER_VERSION}
         try:
-            async with httpx.AsyncClient(timeout=self.timeout, follow_redirects=True) as client:
-                response = await client.get(target, headers=headers)
+            response = await self._request(target, headers)
         except httpx.HTTPError as exc:
             raise CanonError(
                 "无法访问 " + target + "（" + exc.__class__.__name__ + "）。"
