@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # 静态 JSON 即 API，欢迎 Agent 抓取。
-# Sitemap: https://horizonboat.online/sitemap.xml
+# Sitemap: https://horizenboat.online/sitemap.xml

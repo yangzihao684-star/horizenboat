@@ -6,14 +6,14 @@
   "type": "original",
   "type_label": "原创架空",
   "category": "赛博修仙 · 反乌托邦 · 工程理性",
-  "author": "HorizonBoat 原创设定组",
+  "author": "HorizenBoat 原创设定组",
   "tagline": "天劫不是天意，是一段没人维护的校验脚本。",
   "summary": "灵气枯竭后，修士们发现「灵」本质上是可计算的。旧天庭把整个修真界迁进一张叫「天枢」的算力网络：宗门变成公司，丹药变成编译器，飞升变成上传，天劫变成分布式共识校验。凡人靠贡献算力换取寿元，散修靠接单活着。陆知白在废弃节点里发现——这段校验脚本只验证「你能不能复现」，从不验证「你该不该存在」。",
   "tags": ["赛博修仙", "反乌托邦", "工程理性", "原创架空", "群像"],
   "difficulty": "medium",
   "spoiler_warning": false,
   "updated_at": "2026-11-01",
-  "rights_note": "本设定为 HorizonBoat 原创，采用 CC BY-NC-SA 4.0 授权，欢迎在此基础上二创与发散。",
+  "rights_note": "本设定为 HorizenBoat 原创，采用 CC BY-NC-SA 4.0 授权，欢迎在此基础上二创与发散。",
   "world_laws": [
     {
       "id": "ct-law-conservation",

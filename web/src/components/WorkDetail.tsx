@@ -422,7 +422,7 @@ export default function WorkDetail({ route, onBack }: { route: WorkRoute; onBack
             <div className="mt-4 border-t border-line pt-3">
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-faint">MCP</span>
-                <span className="font-mono text-[10px] text-faint">horizonboat-mcp</span>
+                <span className="font-mono text-[10px] text-faint">horizenboat-mcp</span>
               </div>
               <p className="mt-1.5 text-[11px] leading-5 text-faint">
                 不必手抄提示词：把这条调用丢给 Agent，它会自己拉取边界。

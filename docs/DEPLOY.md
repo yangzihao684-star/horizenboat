@@ -48,10 +48,10 @@ CI 里也挂了这一步——数据漂移不应该靠肉眼发现。
 pip install "mcp>=1.2" "httpx>=0.27"
 
 # 直接读本地数据目录（不用起站点）
-HORIZONBOAT_API_URL=D:/ideanovel/web/public/api/v1 python mcp-server/server.py --selftest
+HORIZENBOAT_API_URL=D:/ideanovel/web/public/api/v1 python mcp-server/server.py --selftest
 
 # 或者打本地 dev server
-HORIZONBOAT_API_URL=http://localhost:5173/api/v1 python mcp-server/server.py --selftest
+HORIZENBOAT_API_URL=http://localhost:5173/api/v1 python mcp-server/server.py --selftest
 
 # 协议级冒烟测试（真起一个 MCP 会话）
 python mcp-server/smoke_test.py
@@ -60,7 +60,7 @@ python mcp-server/smoke_test.py
 Windows PowerShell 里设环境变量：
 
 ```powershell
-$env:HORIZONBOAT_API_URL = "D:\ideanovel\web\public\api\v1"
+$env:HORIZENBOAT_API_URL = "D:\ideanovel\web\public\api\v1"
 python mcp-server\server.py --selftest
 ```
 
@@ -112,18 +112,18 @@ npm run preview      # 本地预览生产构建
 
 ```bash
 npm --prefix web run build
-npx wrangler pages deploy web/dist --project-name horizonboat
+npx wrangler pages deploy web/dist --project-name horizenboat
 ```
 
 仓库根目录的 `wrangler.toml` 已经写好 `pages_build_output_dir`。
 
 ### 3.3 自定义域名
 
-1. Cloudflare Pages → 项目 → Custom domains → 添加 `horizonboat.online` 与 `www.horizonboat.online`；
-2. 在 Cloudflare DNS 里加 `CNAME horizonboat → <project>.pages.dev`（根域用 `@` + CNAME flattening）；
+1. Cloudflare Pages → 项目 → Custom domains → 添加 `horizenboat.online` 与 `www.horizenboat.online`；
+2. 在 Cloudflare DNS 里加 `CNAME horizenboat → <project>.pages.dev`（根域用 `@` + CNAME flattening）；
 3. SSL 由 Cloudflare 自动签发。
 
-这个域名同时也是 MCP Server 的默认数据源（`https://horizonboat.online/api/v1`），
+这个域名同时也是 MCP Server 的默认数据源（`https://horizenboat.online/api/v1`），
 所以**域名变更时记得同步改** `server.py` 里的 `DEFAULT_API` 与前端 `mcpConfig()` 的默认值。
 
 ---
@@ -150,14 +150,14 @@ npx wrangler pages deploy web/dist --project-name horizonboat
 
 ```bash
 cd mcp-server
-uv build            # 生成 dist/horizonboat-mcp-1.0.0-py3-none-any.whl
+uv build            # 生成 dist/horizenboat-mcp-1.0.0-py3-none-any.whl
 uv publish          # 需要 PYPI_TOKEN
 ```
 
-发布之后用户就能写 `{"command": "uvx", "args": ["horizonboat-mcp"]}`。
+发布之后用户就能写 `{"command": "uvx", "args": ["horizenboat-mcp"]}`。
 
 打包说明：`pyproject.toml` 用 hatchling 的 `only-include = ["server.py"]`，
-把单文件放到 wheel 根，`horizonboat-mcp = "server:main"` 直接指向它——**没有包目录、没有 `__init__.py`**，
+把单文件放到 wheel 根，`horizenboat-mcp = "server:main"` 直接指向它——**没有包目录、没有 `__init__.py`**，
 保持"单文件"这个卖点。
 
 ---
@@ -177,7 +177,7 @@ uv publish          # 需要 PYPI_TOKEN
 可以，`resolve_characters` 支持 id / 中文名 / 英文名 / 别名 / 「·」前的短名。但传 id 最稳。
 
 **Q：改完数据要重启 MCP 吗**
-不用。缓存 TTL 默认 300 秒；想立刻生效就设 `HORIZONBOAT_CACHE_TTL=0`。
+不用。缓存 TTL 默认 300 秒；想立刻生效就设 `HORIZENBOAT_CACHE_TTL=0`。
 
 **Q：能不能加第三部作品**
 加一个 `works/{id}.json`，再往 `index.json` 的 `works` 里加一条（`stats`、`counts`、`tags` 都要同步），

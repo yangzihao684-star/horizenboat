@@ -1,7 +1,7 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-  HorizonBoat 一键发布：GitHub 建仓推送 / Cloudflare Pages 部署 / PyPI 发包。
+  HorizenBoat 一键发布：GitHub 建仓推送 / Cloudflare Pages 部署 / PyPI 发包。
 
 .DESCRIPTION
   凭据只从 .secrets/ 读取（该目录已被 .gitignore 忽略），脚本不会打印任何 token。
@@ -15,11 +15,11 @@
   pwsh scripts/publish.ps1 -Step cloudflare
 #>
 param(
-  [ValidateSet('status', 'github', 'cloudflare', 'pypi')]
+  [ValidateSet('status', 'github', 'cloudflare', 'pypi', 'zones')]
   [string]$Step = 'status',
-  [string]$RepoName = 'horizonboat',
-  [string]$ProjectName = 'horizonboat',
-  [string]$Domain = 'horizonboat.online',
+  [string]$RepoName = 'horizenboat',
+  [string]$ProjectName = 'horizenboat',
+  [string]$Domain = 'horizenboat.online',
   [switch]$Private,
   [switch]$Force,
   [switch]$DryRun
@@ -38,7 +38,7 @@ function Read-Secret([string]$Name) {
 }
 
 function Show-Status {
-  Write-Host 'HorizonBoat publish status' -ForegroundColor Cyan
+  Write-Host 'HorizenBoat publish status' -ForegroundColor Cyan
   Write-Host ('  repo root : ' + $Root)
 
   $sizes = @{}
@@ -64,13 +64,13 @@ function Show-Status {
 }
 
 function Step-GitHub {
-  $token = Read-Secret 'github.txt' | Select-Object -First 1
+  $token = @(Read-Secret 'github.txt') | Select-Object -First 1
   if (-not $token) { throw 'missing .secrets/github.txt' }
 
   $headers = @{
     Authorization = 'Bearer ' + $token
     Accept        = 'application/vnd.github+json'
-    'User-Agent'  = 'horizonboat-publish'
+    'User-Agent'  = 'horizenboat-publish'
     'X-GitHub-Api-Version' = '2022-11-28'
   }
 
@@ -91,7 +91,7 @@ function Step-GitHub {
     $body = @{
       name        = $RepoName
       private     = [bool]$Private
-      description = 'HorizonBoat - canon-locked fanwork library + MCP server'
+      description = 'HorizenBoat - canon-locked fanwork library + MCP server'
       homepage    = 'https://' + $Domain
     } | ConvertTo-Json
     Invoke-RestMethod -Uri 'https://api.github.com/user/repos' -Method Post -Headers $headers -Body $body -ContentType 'application/json' | Out-Null
@@ -123,7 +123,7 @@ function Step-GitHub {
 }
 
 function Step-Cloudflare {
-  $lines = Read-Secret 'cloudflare.txt'
+  $lines = @(Read-Secret 'cloudflare.txt')
   if ($lines.Count -eq 0) { throw 'missing .secrets/cloudflare.txt' }
 
   if ($lines.Count -ge 2) { $accountId = $lines[0]; $cfToken = $lines[1] } else { $accountId = $null; $cfToken = $lines[0] }
@@ -167,11 +167,50 @@ function Step-Cloudflare {
   } finally { Pop-Location }
 
   Write-Host ('  url       : https://' + $ProjectName + '.pages.dev')
-  Write-Host ('  next      : bind ' + $Domain + ' in Pages -> Custom domains (needs a CNAME at your registrar)')
+
+  # 绑定自定义域名：需要 token 有 Zone:Read + DNS:Edit，且域名托管在同一账号
+  if ($Domain) {
+    $zones = $null
+    try {
+      $zones = Invoke-RestMethod -Uri ('https://api.cloudflare.com/client/v4/zones?per_page=100') -Headers $headers
+    } catch { }
+
+    if (-not $zones -or @($zones.result).Count -eq 0) {
+      Write-Host ('  domain    : SKIPPED - token cannot list zones (add Zone:Read + DNS:Edit)')
+      Write-Host ('              or bind manually: Pages -> ' + $ProjectName + ' -> Custom domains -> ' + $Domain)
+      return
+    }
+
+    $zone = @($zones.result) | Where-Object { $Domain -eq $_.name -or $Domain.EndsWith('.' + $_.name) } | Select-Object -First 1
+    if (-not $zone) {
+      Write-Host ('  domain    : SKIPPED - ' + $Domain + ' is not in this account. Zones: ' + ((@($zones.result) | ForEach-Object { $_.name }) -join ', '))
+      return
+    }
+
+    Write-Host ('  zone      : ' + $zone.name + ' (' + $zone.id + ')')
+    if ($DryRun) { Write-Host ('  [dry-run] POST ' + $projectUrl + '/domains  name=' + $Domain); return }
+
+    try {
+      $existing = Invoke-RestMethod -Uri ($projectUrl + '/domains') -Headers $headers
+      $already = @($existing.result) | Where-Object { $_.name -eq $Domain }
+      if ($already) {
+        Write-Host ('  domain    : already attached (status ' + $already.status + ')')
+      } else {
+        $dbody = @{ name = $Domain } | ConvertTo-Json
+        $added = Invoke-RestMethod -Uri ($projectUrl + '/domains') -Method Post -Headers $headers -Body $dbody -ContentType 'application/json'
+        Write-Host ('  domain    : attached ' + $Domain + ' (status ' + $added.result.status + ')')
+      }
+      Write-Host ('  live      : https://' + $Domain)
+    } catch {
+      $msg = $_.Exception.Message
+      Write-Host ('  domain    : FAILED - ' + $msg)
+      Write-Host ('              fallback: Pages -> Custom domains -> ' + $Domain)
+    }
+  }
 }
 
 function Step-PyPI {
-  $token = Read-Secret 'pypi.txt' | Select-Object -First 1
+  $token = @(Read-Secret 'pypi.txt') | Select-Object -First 1
   if (-not $token) { throw 'missing .secrets/pypi.txt' }
 
   Push-Location (Join-Path $Root 'mcp-server')
@@ -192,10 +231,32 @@ function Step-PyPI {
     $env:UV_PUBLISH_TOKEN = $token
     uv publish
     if ($LASTEXITCODE -ne 0) { throw 'uv publish failed' }
-    Write-Host '  published : https://pypi.org/project/horizonboat-mcp/'
+    Write-Host '  published : https://pypi.org/project/horizenboat-mcp/'
   } finally {
     Remove-Item Env:UV_PUBLISH_TOKEN -ErrorAction SilentlyContinue
     Pop-Location
+  }
+}
+
+function Step-Zones {
+  $lines = @(Read-Secret 'cloudflare.txt')
+  if ($lines.Count -eq 0) { throw 'missing .secrets/cloudflare.txt' }
+  if ($lines.Count -ge 2) { $accountId = $lines[0]; $cfToken = $lines[1] } else { $accountId = $null; $cfToken = $lines[0] }
+  $headers = @{ Authorization = 'Bearer ' + $cfToken }
+
+  $accounts = Invoke-RestMethod -Uri 'https://api.cloudflare.com/client/v4/accounts' -Headers $headers
+  Write-Host ('accounts  : ' + @($accounts.result).Count)
+  @($accounts.result) | ForEach-Object { Write-Host ('  ' + $_.id + '  ' + $_.name) }
+
+  $zones = Invoke-RestMethod -Uri 'https://api.cloudflare.com/client/v4/zones?per_page=100' -Headers $headers
+  $count = @($zones.result).Count
+  Write-Host ('zones     : ' + $count)
+  @($zones.result) | ForEach-Object { Write-Host ('  ' + $_.name + '  [' + $_.status + ']  ' + $_.id) }
+
+  if ($count -eq 0) {
+    Write-Host ''
+    Write-Host '  0 zones means the token cannot see any zone. Either it lacks Zone:Read,'
+    Write-Host '  or the domain lives in a different Cloudflare account than the one above.'
   }
 }
 
@@ -204,4 +265,5 @@ switch ($Step) {
   'github'     { Step-GitHub }
   'cloudflare' { Step-Cloudflare }
   'pypi'       { Step-PyPI }
+  'zones'      { Step-Zones }
 }

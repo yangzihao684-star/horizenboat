@@ -20,10 +20,10 @@ export default function TopBar({
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-canvas/80 backdrop-blur-md">
       <div className="shell flex h-14 items-center gap-3 px-4 sm:px-6">
-        <a href="#/" className="flex shrink-0 items-center gap-2.5" aria-label="HorizonBoat 首页">
+        <a href="#/" className="flex shrink-0 items-center gap-2.5" aria-label="HorizenBoat 首页">
           <IconBrand className="size-[18px] text-accent" />
-          <span className="text-[13.5px] font-semibold tracking-[-0.01em] text-fg">HorizonBoat</span>
-          <span className="hidden text-[11px] text-faint sm:inline">地平线之舟</span>
+          <span className="text-[13.5px] font-semibold tracking-[-0.01em] text-fg">HorizenBoat</span>
+          <span className="hidden text-[11px] text-faint sm:inline">未知之船</span>
         </a>
 
         <nav className="ml-5 hidden items-center gap-0.5 md:flex" aria-label="主导航">

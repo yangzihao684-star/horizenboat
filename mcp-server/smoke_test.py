@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-horizonboat-mcp 协议冒烟测试。
+horizenboat-mcp 协议冒烟测试。
 
 真的起一个 MCP 会话（stdio），列出工具 / 提示词 / 资源，并调用一次核心工具。
 用来在本地确认「装好了、能连、能调」，不需要任何客户端。
 
 用法:
   python smoke_test.py
-  HORIZONBOAT_API_URL=D:/ideanovel/web/public/api/v1 python smoke_test.py
+  HORIZENBOAT_API_URL=D:/ideanovel/web/public/api/v1 python smoke_test.py
 """
 
 from __future__ import annotations
@@ -45,11 +45,11 @@ async def main() -> int:
             print("[ok] resources =", ", ".join(str(resource.uri) for resource in resources.resources))
 
             result = await session.call_tool(
-                "search_horizonboat",
+                "search_horizenboat",
                 arguments={"query": "克莱恩"},
             )
             text = "\n".join(block.text for block in result.content if hasattr(block, "text"))
-            print("[ok] search_horizonboat ->", text.splitlines()[0] if text else "(empty)")
+            print("[ok] search_horizenboat ->", text.splitlines()[0] if text else "(empty)")
 
             result = await session.call_tool(
                 "lock_canon_context",

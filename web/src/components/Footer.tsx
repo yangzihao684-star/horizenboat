@@ -10,8 +10,8 @@ export default function Footer() {
           <div className="max-w-[46ch]">
             <div className="flex items-center gap-2">
               <IconBrand className="size-4 text-accent" />
-              <span className="text-[13px] font-semibold text-fg">HorizonBoat</span>
-              <span className="text-[11px] text-faint">/ 地平线之舟</span>
+              <span className="text-[13px] font-semibold text-fg">HorizenBoat</span>
+              <span className="text-[11px] text-faint">/ 未知之船</span>
             </div>
             <p className="mt-2.5 text-[12px] leading-6 text-faint">
               把设定变成可执行的文件。站点不接数据库、不装统计脚本、不请求任何第三方资源——打开即读，复制即用。
@@ -33,7 +33,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line pt-5 text-[11px] text-faint">
-          <span>© 2026 HorizonBoat</span>
+          <span>© 2026 HorizenBoat</span>
           <span>设定摘要 CC BY-NC-SA 4.0</span>
           <span>原著与角色版权归原作者所有，本站仅作同人写作的连续性校验</span>
           <span className="ml-auto font-mono">schema 1.0 · static</span>

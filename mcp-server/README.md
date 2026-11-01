@@ -1,6 +1,6 @@
-# horizonboat-mcp
+# horizenboat-mcp
 
-HorizonBoat 的 MCP Server。**单文件、零复杂依赖、带进程内 TTL 缓存。**
+HorizenBoat 的 MCP Server。**单文件、零复杂依赖、带进程内 TTL 缓存。**
 
 它不负责写，它负责**不许写错**：
 
@@ -14,14 +14,14 @@ HorizonBoat 的 MCP Server。**单文件、零复杂依赖、带进程内 TTL �
 
 | 工具 | 作用 | 关键行为 |
 | --- | --- | --- |
-| `search_horizonboat(query, tag="")` | 检索作品 / 角色 / 标签 / 钩子 | 只读索引，不消耗数据包；命中角色时直接给出下一步调用 |
+| `search_horizenboat(query, tag="")` | 检索作品 / 角色 / 标签 / 钩子 | 只读索引，不消耗数据包；命中角色时直接给出下一步调用 |
 | `lock_canon_context(work_id, timeline_id, active_characters)` | **核心防乱改** | 返回铁律 + 时间线边界 + 角色钢印 + 文风，末尾附 `GUARDRAIL DIRECTIVE`（R1–R6） |
 | `audit_plot_ooc(work_id, timeline_id, proposed_plot)` | **动笔前审查** | 关键词级交叉比对，输出 `BLOCK / REVISE / PASS` 与逐条改法 |
 | `spark_world_divergence(work_id, hook_id="", custom_what_if="")` | **高阶发散** | 注入三阶蝴蝶效应框架 + 五字段交付协议 |
 
 另外还有：
 
-- 资源：`horizonboat://index`、`horizonboat://works/{work_id}`
+- 资源：`horizenboat://index`、`horizenboat://works/{work_id}`
 - 提示词：`hb-fanfic`（先锁后写）、`hb-brainstorm`（交互式发散）
 
 ### 审查到底怎么判
@@ -52,7 +52,7 @@ python mcp-server/server.py                   # stdio，接客户端
 ```bash
 cd mcp-server
 uv sync
-uv run horizonboat-mcp --selftest
+uv run horizenboat-mcp --selftest
 ```
 
 ### 2.3 协议冒烟测试
@@ -61,7 +61,7 @@ uv run horizonboat-mcp --selftest
 
 ```bash
 python mcp-server/smoke_test.py
-# [ok] tools = search_horizonboat, lock_canon_context, audit_plot_ooc, spark_world_divergence
+# [ok] tools = search_horizenboat, lock_canon_context, audit_plot_ooc, spark_world_divergence
 # [ok] prompts = hb-fanfic, hb-brainstorm
 # [ok] lock_canon_context -> chars = 4681 | guardrail = True
 ```
@@ -75,10 +75,10 @@ python mcp-server/smoke_test.py
 ```json
 {
   "mcpServers": {
-    "horizonboat": {
+    "horizenboat": {
       "command": "python",
-      "args": ["D:/path/to/horizonboat/mcp-server/server.py"],
-      "env": { "HORIZONBOAT_API_URL": "https://horizonboat.online/api/v1" }
+      "args": ["D:/path/to/horizenboat/mcp-server/server.py"],
+      "env": { "HORIZENBOAT_API_URL": "https://horizenboat.online/api/v1" }
     }
   }
 }
@@ -87,22 +87,22 @@ python mcp-server/smoke_test.py
 发布到 PyPI 之后可以换成更短的写法：
 
 ```json
-{ "command": "uvx", "args": ["horizonboat-mcp"] }
+{ "command": "uvx", "args": ["horizenboat-mcp"] }
 ```
 
 ### 环境变量
 
 | 变量 | 默认 | 说明 |
 | --- | --- | --- |
-| `HORIZONBOAT_API_URL` | https://horizonboat.online/api/v1 | 可填 `file://` 或本地目录（如 `D:/repo/web/public/api/v1`） |
-| `HORIZONBOAT_CACHE_TTL` | 300 | 缓存秒数；0 表示每次都取 |
-| `HORIZONBOAT_TIMEOUT` | 15 | 单次 HTTP 超时 |
-| `HORIZONBOAT_TRANSPORT` | stdio | `stdio` / `sse` / `streamable-http` |
+| `HORIZENBOAT_API_URL` | https://horizenboat.online/api/v1 | 可填 `file://` 或本地目录（如 `D:/repo/web/public/api/v1`） |
+| `HORIZENBOAT_CACHE_TTL` | 300 | 缓存秒数；0 表示每次都取 |
+| `HORIZENBOAT_TIMEOUT` | 15 | 单次 HTTP 超时 |
+| `HORIZENBOAT_TRANSPORT` | stdio | `stdio` / `sse` / `streamable-http` |
 
 本地联调时不启站点也能跑：直接把 API URL 指到数据目录即可。
 
 ```bash
-HORIZONBOAT_API_URL=D:/ideanovel/web/public/api/v1 python server.py --selftest
+HORIZENBOAT_API_URL=D:/ideanovel/web/public/api/v1 python server.py --selftest
 ```
 
 ---

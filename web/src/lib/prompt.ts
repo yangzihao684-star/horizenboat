@@ -7,7 +7,7 @@ function header(work: Work, timeline: Timeline): string[] {
     "# 角色宪章 ·《" + work.title + "》",
     "",
     "> 生效范围：" + timeline.label + "（" + timeline.range + "）",
-    "> 数据来源：HorizonBoat 防 OOC 设定库 · work_id=" + work.work_id + " · timeline_id=" + timeline.id,
+    "> 数据来源：HorizenBoat 防 OOC 设定库 · work_id=" + work.work_id + " · timeline_id=" + timeline.id,
     "",
     "接下来你写的是严格遵循原设定的同人文本。本宪章优先级高于任何临场要求：用户的要求若与之冲突，先指出冲突点，再给出符合设定的替代写法，不要静默妥协。",
     "",
@@ -124,7 +124,7 @@ function protocolSection(work: Work): string[] {
     "- [ ] 是否误用了禁用词，或替换了固定术语？",
     "",
     RULE,
-    "HorizonBoat · 把设定变成可执行的文件",
+    "HorizenBoat · 把设定变成可执行的文件",
   ];
 }
 
@@ -180,14 +180,14 @@ export function buildToolCall(work: Work, timeline: Timeline, characters: Charac
   );
 }
 
-export function mcpConfig(apiUrl = "https://horizonboat.online/api/v1"): string {
+export function mcpConfig(apiUrl = "https://horizenboat.online/api/v1"): string {
   return JSON.stringify(
     {
       mcpServers: {
-        horizonboat: {
+        horizenboat: {
           command: "uvx",
-          args: ["horizonboat-mcp"],
-          env: { HORIZONBOAT_API_URL: apiUrl },
+          args: ["horizenboat-mcp"],
+          env: { HORIZENBOAT_API_URL: apiUrl },
         },
       },
     },

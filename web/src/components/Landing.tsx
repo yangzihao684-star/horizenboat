@@ -68,7 +68,7 @@ export default function Landing({
           <div className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1">
             <span className="size-1.5 rounded-full bg-accent" />
             <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted">
-              HorizonBoat · 防 OOC 设定库
+              HorizenBoat · 防 OOC 设定库
             </span>
           </div>
 
@@ -238,7 +238,7 @@ export default function Landing({
           index="00"
           label="AGENT INTEGRATION"
           title="把设定库接进你的 Agent"
-          desc="horizonboat-mcp 是单文件 MCP Server：拉取铁律、锁定时间线、审查大纲、三阶推演。它不做创作，它负责不让创作跑偏。"
+          desc="horizenboat-mcp 是单文件 MCP Server：拉取铁律、锁定时间线、审查大纲、三阶推演。它不做创作，它负责不让创作跑偏。"
         />
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:items-start">

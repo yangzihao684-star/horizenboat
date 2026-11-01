@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-horizonboat-mcp — HorizonBoat 防 OOC 设定库的 MCP Server。
+horizenboat-mcp — HorizenBoat 防 OOC 设定库的 MCP Server。
 
 单文件、零复杂依赖（mcp + httpx），带进程内 TTL 缓存。
-默认读取 https://horizonboat.online/api/v1，可用环境变量切换：
-  HORIZONBOAT_API_URL   数据源（https URL / file:// / 本地目录）
-  HORIZONBOAT_CACHE_TTL 缓存秒数，默认 300
-  HORIZONBOAT_TIMEOUT   单次请求超时秒数，默认 15
+默认读取 https://horizenboat.online/api/v1，可用环境变量切换：
+  HORIZENBOAT_API_URL   数据源（https URL / file:// / 本地目录）
+  HORIZENBOAT_CACHE_TTL 缓存秒数，默认 300
+  HORIZENBOAT_TIMEOUT   单次请求超时秒数，默认 15
 
 用法:
   python server.py                      # stdio，给 Claude Desktop / Cursor / Cline 用
@@ -34,9 +34,9 @@ from typing import Any
 import httpx
 from mcp.server.fastmcp import FastMCP
 
-SERVER_NAME = "horizonboat"
+SERVER_NAME = "horizenboat"
 SERVER_VERSION = "1.0.0"
-DEFAULT_API = "https://horizonboat.online/api/v1"
+DEFAULT_API = "https://horizenboat.online/api/v1"
 LINE = "─" * 58
 FENCE = chr(96) * 3
 
@@ -57,7 +57,7 @@ def _env_float(name: str, fallback: float) -> float:
 
 
 def _api_base() -> str:
-    raw = (os.getenv("HORIZONBOAT_API_URL") or DEFAULT_API).strip()
+    raw = (os.getenv("HORIZENBOAT_API_URL") or DEFAULT_API).strip()
     return raw.rstrip("/" + chr(92)) or DEFAULT_API
 
 
@@ -70,8 +70,8 @@ class CanonStore:
 
     def __init__(self) -> None:
         self.base = _api_base()
-        self.ttl = _env_float("HORIZONBOAT_CACHE_TTL", 300.0)
-        self.timeout = _env_float("HORIZONBOAT_TIMEOUT", 15.0)
+        self.ttl = _env_float("HORIZENBOAT_CACHE_TTL", 300.0)
+        self.timeout = _env_float("HORIZENBOAT_TIMEOUT", 15.0)
         self._cache: dict[str, tuple[float, dict[str, Any]]] = {}
         self._lock = threading.Lock()
         self.hits = 0
@@ -130,17 +130,17 @@ class CanonStore:
                 return await client.get(target, headers=headers)
 
     async def _load_http(self, target: str) -> dict[str, Any]:
-        headers = {"accept": "application/json", "user-agent": "horizonboat-mcp/" + SERVER_VERSION}
+        headers = {"accept": "application/json", "user-agent": "horizenboat-mcp/" + SERVER_VERSION}
         try:
             response = await self._request(target, headers)
         except httpx.HTTPError as exc:
             raise CanonError(
                 "无法访问 " + target + "（" + exc.__class__.__name__ + "）。"
-                "检查网络，或用 HORIZONBOAT_API_URL 指向本地数据目录。"
+                "检查网络，或用 HORIZENBOAT_API_URL 指向本地数据目录。"
             ) from exc
 
         if response.status_code == 404:
-            raise CanonError("资源不存在：" + target + "。用 search_horizonboat 确认 work_id。")
+            raise CanonError("资源不存在：" + target + "。用 search_horizenboat 确认 work_id。")
         if response.status_code >= 400:
             raise CanonError("HTTP " + str(response.status_code) + " · " + target)
         try:
@@ -154,7 +154,7 @@ class CanonStore:
         if not path.exists():
             raise CanonError(
                 "本地数据文件不存在：" + str(path)
-                + "。HORIZONBOAT_API_URL 应指向包含 index.json 与 works/ 的目录。"
+                + "。HORIZENBOAT_API_URL 应指向包含 index.json 与 works/ 的目录。"
             )
         try:
             return json.loads(path.read_text(encoding="utf-8"))
@@ -249,7 +249,7 @@ def _json_block(payload: Any) -> str:
 async def load_work(work_id: str) -> dict[str, Any]:
     key = _clean(work_id)
     if not key:
-        raise CanonError("缺少 work_id。先调用 search_horizonboat(query=...) 找到作品 id。")
+        raise CanonError("缺少 work_id。先调用 search_horizenboat(query=...) 找到作品 id。")
 
     try:
         return await STORE.work(key)
@@ -423,7 +423,7 @@ def _index_entries(index: dict[str, Any]) -> list[dict[str, Any]]:
     return entries
 
 
-async def search_horizonboat_impl(query: str, tag: str = "") -> str:
+async def search_horizenboat_impl(query: str, tag: str = "") -> str:
     index = await STORE.index()
     works = index.get("works", [])
     wanted_tag = _clean(tag)
@@ -446,7 +446,7 @@ async def search_horizonboat_impl(query: str, tag: str = "") -> str:
     hits = ranked[:8]
 
     lines: list[str] = []
-    header = "# HorizonBoat 检索"
+    header = "# HorizenBoat 检索"
     if text:
         header += " · 「" + text + "」"
     if wanted_tag:
@@ -1074,8 +1074,8 @@ mcp = FastMCP(SERVER_NAME)
 
 
 @mcp.tool()
-async def search_horizonboat(query: str, tag: str = "") -> str:
-    """检索 HorizonBoat 上的作品、角色、架空世界观与发散钩子。
+async def search_horizenboat(query: str, tag: str = "") -> str:
+    """检索 HorizenBoat 上的作品、角色、架空世界观与发散钩子。
 
     用作品名、角色名、世界观标签（如 赛博修仙 / 西幻 / 无限流）或脑洞关键词做模糊检索。
     返回 work_id、时间线 id、角色 id，以及整份数据包的下一步调用方式。
@@ -1086,7 +1086,7 @@ async def search_horizonboat(query: str, tag: str = "") -> str:
         tag: 可选，按标签精确过滤（例如 "赛博修仙"）。
     """
     try:
-        return await search_horizonboat_impl(query, tag)
+        return await search_horizenboat_impl(query, tag)
     except CanonError as exc:
         return "错误：" + str(exc)
 
@@ -1107,7 +1107,7 @@ async def lock_canon_context(
     每句台词必须贴合 speech_pattern，每次动用力量都必须写出代价。
 
     Args:
-        work_id: 作品 id，来自 search_horizonboat 的返回值。
+        work_id: 作品 id，来自 search_horizenboat 的返回值。
         timeline_id: 时间线 id（如 t1 / t2 / t3）。留空则使用该作品的推荐时间线。
         active_characters: 出场角色 id 列表（也接受中文名或英文名）。留空则使用推荐角色。
     """
@@ -1159,14 +1159,14 @@ async def spark_world_divergence(work_id: str, hook_id: str = "", custom_what_if
         return "错误：" + str(exc)
 
 
-@mcp.resource("horizonboat://index")
+@mcp.resource("horizenboat://index")
 async def read_index() -> str:
-    """HorizonBoat 的检索索引（原始 JSON）。"""
+    """HorizenBoat 的检索索引（原始 JSON）。"""
     index = await STORE.index()
     return json.dumps(index, ensure_ascii=False, indent=2)
 
 
-@mcp.resource("horizonboat://works/{work_id}")
+@mcp.resource("horizenboat://works/{work_id}")
 async def read_work(work_id: str) -> str:
     """单部作品的完整防 OOC 数据包（原始 JSON）。"""
     work = await load_work(work_id)
@@ -1187,7 +1187,7 @@ def hb_fanfic(work_id: str = "", timeline_id: str = "", characters: str = "") ->
     return (
         "我们要写一篇严格遵循原设定的同人。请按下面的流程推进，不要跳步。\n\n"
         "**第一步 · 确定作品**\n"
-        "- 如果用户还没有指定作品：调用 search_horizonboat(query=\"\", tag=\"\") 列出全部作品，"
+        "- 如果用户还没有指定作品：调用 search_horizenboat(query=\"\", tag=\"\") 列出全部作品，"
         "把「标题 + work_id + 时间线」摆出来让用户选。\n"
         "- 已经指定：" + ("、".join(preset) if preset else "（用户尚未指定，先问）") + "\n\n"
         "**第二步 · 锁定宪章（强制，不可跳过）**\n"
@@ -1217,7 +1217,7 @@ def hb_brainstorm(work_id: str = "", hook_id: str = "", custom_what_if: str = ""
     return (
         "我们要在这个世界观里做一次有规则支撑的脑洞发散，而不是随机抽卡。\n\n"
         "**第一步 · 载入世界**\n"
-        "- 还没有指定作品：调用 search_horizonboat 列出作品，让用户选。\n"
+        "- 还没有指定作品：调用 search_horizenboat 列出作品，让用户选。\n"
         "- 已指定：" + ("、".join(preset) if preset else "（待用户选择）") + "\n\n"
         "**第二步 · 调用 spark_world_divergence**\n"
         "- 有明确方向：传入 hook_id 或 custom_what_if。\n"
@@ -1255,7 +1255,7 @@ CLEAN_PLOT = (
 
 async def selftest() -> int:
     print(LINE)
-    print("horizonboat-mcp " + SERVER_VERSION + " selftest")
+    print("horizenboat-mcp " + SERVER_VERSION + " selftest")
     print("API   : " + STORE.base)
     print("CACHE : " + STORE.stats())
     print(LINE)
@@ -1269,8 +1269,8 @@ async def selftest() -> int:
     works = index.get("works") or []
     print("index ok · " + str(len(works)) + " 部作品")
 
-    print("\n>>> search_horizonboat(query=\"扮演\")")
-    print(await search_horizonboat_impl("扮演", ""))
+    print("\n>>> search_horizenboat(query=\"扮演\")")
+    print(await search_horizenboat_impl("扮演", ""))
 
     if not works:
         return 1
@@ -1299,17 +1299,17 @@ async def selftest() -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="horizonboat-mcp",
-        description="HorizonBoat 防 OOC 设定库 MCP Server（单文件 + 本地缓存）",
+        prog="horizenboat-mcp",
+        description="HorizenBoat 防 OOC 设定库 MCP Server（单文件 + 本地缓存）",
     )
     parser.add_argument(
         "--transport",
-        default=os.getenv("HORIZONBOAT_TRANSPORT", "stdio"),
+        default=os.getenv("HORIZENBOAT_TRANSPORT", "stdio"),
         choices=["stdio", "sse", "streamable-http"],
         help="传输方式，默认 stdio",
     )
-    parser.add_argument("--host", default=os.getenv("HORIZONBOAT_HOST", "127.0.0.1"))
-    parser.add_argument("--port", type=int, default=int(os.getenv("HORIZONBOAT_PORT", "8765")))
+    parser.add_argument("--host", default=os.getenv("HORIZENBOAT_HOST", "127.0.0.1"))
+    parser.add_argument("--port", type=int, default=int(os.getenv("HORIZENBOAT_PORT", "8765")))
     parser.add_argument("--selftest", action="store_true", help="不启动 MCP，直接跑一遍全部工具")
     args = parser.parse_args(argv)
 
@@ -1317,7 +1317,7 @@ def main(argv: list[str] | None = None) -> int:
         return asyncio.run(selftest())
 
     print(
-        "horizonboat-mcp " + SERVER_VERSION + " · api=" + STORE.base + " · ttl=" + str(int(STORE.ttl)) + "s",
+        "horizenboat-mcp " + SERVER_VERSION + " · api=" + STORE.base + " · ttl=" + str(int(STORE.ttl)) + "s",
         file=sys.stderr,
     )
 

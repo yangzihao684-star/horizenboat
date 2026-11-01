@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://horizonboat.online/api/v1/schema.json",
-  "title": "HorizonBoat Work Package",
+  "$id": "https://horizenboat.online/api/v1/schema.json",
+  "title": "HorizenBoat Work Package",
   "description": "单部作品的完整防 OOC 数据包。keywords / triggers 不是注释，而是 MCP 审查引擎的触发词。",
   "type": "object",
   "required": ["schema_version", "work_id", "title", "category", "tags", "world_laws", "timelines", "characters", "brainstorm_hooks"],

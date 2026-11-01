@@ -220,7 +220,7 @@ for (const tag of index.tags) {
   need(actual === tag.count, "index.json -> 标签 " + tag.tag + " 的 count（" + tag.count + "）与实际（" + actual + "）不一致");
 }
 
-console.log("HorizonBoat API check");
+console.log("HorizenBoat API check");
 console.log("  works       " + index.works.length);
 console.log("  characters  " + characterCount);
 console.log("  timelines   " + timelineCount);

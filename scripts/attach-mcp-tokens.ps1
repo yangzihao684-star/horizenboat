@@ -120,7 +120,7 @@ if ($Verify) {
   if (-not $t) { $t = Find-Value @((Read-Profile) -split "\r?\n") 'github' }
   if ($t -and $t -ne $GhPlaceholder) {
     try {
-      $me = Invoke-RestMethod -Uri 'https://api.github.com/user' -Headers @{ Authorization = 'Bearer ' + $t; 'User-Agent' = 'horizonboat' } -TimeoutSec 20
+      $me = Invoke-RestMethod -Uri 'https://api.github.com/user' -Headers @{ Authorization = 'Bearer ' + $t; 'User-Agent' = 'horizenboat' } -TimeoutSec 20
       Write-Host ('github    : OK as ' + $me.login)
     } catch {
       $code = try { [int]$_.Exception.Response.StatusCode } catch { 0 }

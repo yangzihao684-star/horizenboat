@@ -1,4 +1,4 @@
-# HorizonBoat · 地平线之舟
+# HorizenBoat · 未知之船
 
 > 把设定锁死，把脑洞放开。
 
@@ -13,7 +13,7 @@
 ## 1. 目录树
 
 ```
-horizonboat/
+horizenboat/
 ├── web/                             # 静态站点：Vite 7 + React 19 + Tailwind v4
 │   ├── public/
 │   │   ├── api/v1/                  # ★ 唯一数据源（站点与 Agent 共用）
@@ -67,7 +67,7 @@ python mcp-server/smoke_test.py
 MCP 想读本地数据，不用起站点：
 
 ```bash
-HORIZONBOAT_API_URL=D:/ideanovel/web/public/api/v1 python mcp-server/server.py --selftest
+HORIZENBOAT_API_URL=D:/ideanovel/web/public/api/v1 python mcp-server/server.py --selftest
 ```
 
 ---
@@ -77,7 +77,7 @@ HORIZONBOAT_API_URL=D:/ideanovel/web/public/api/v1 python mcp-server/server.py -
 ### 3.1 时间线闸门（而不是"角色设定"）
 
 设定文档最常见的失败是：写了一堆"某某性格如何"，却不写**他在这一刻知道什么**。
-HorizonBoat 把每个时期拍成一张闸门：
+HorizenBoat 把每个时期拍成一张闸门：
 
 - `status_quo` 世界此刻的局势
 - `power_ceiling` 这个时期的战力天花板
@@ -212,7 +212,7 @@ HorizonBoat 把每个时期拍成一张闸门：
 
 | 工具 | 一句话 |
 | --- | --- |
-| `search_horizonboat` | 找作品、角色、标签、钩子 |
+| `search_horizenboat` | 找作品、角色、标签、钩子 |
 | `lock_canon_context` | 锁铁律 + 时间线 + 角色钢印，末尾附 `GUARDRAIL DIRECTIVE`（R1–R6） |
 | `audit_plot_ooc` | 动笔前撞设定，返回 `BLOCK / REVISE / PASS` 与逐条改法 |
 | `spark_world_divergence` | 三阶蝴蝶效应：规则碰撞 → 势力反弹 → 生态异变 |
@@ -228,7 +228,7 @@ HorizonBoat 把每个时期拍成一张闸门：
 - Cloudflare Pages：`npm run build` + 输出目录 `web/dist`
 - GitHub Pages：仓库已带 `.github/workflows/deploy-pages.yml`
 
-完整步骤（含自定义域名 horizonboat.online、缓存头、MCP 安装）见 [docs/DEPLOY.md](docs/DEPLOY.md)。
+完整步骤（含自定义域名 horizenboat.online、缓存头、MCP 安装）见 [docs/DEPLOY.md](docs/DEPLOY.md)。
 
 ---
 

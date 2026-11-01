@@ -1,8 +1,8 @@
 {
-  "name": "horizonboat",
+  "name": "horizenboat",
   "version": "1.0.0",
   "private": true,
-  "description": "HorizonBoat · 防 OOC 设定库与世界观发散引擎（静态站点 + MCP Server）",
+  "description": "HorizenBoat · 防 OOC 设定库与世界观发散引擎（静态站点 + MCP Server）",
   "scripts": {
     "dev": "npm --prefix web run dev",
     "build": "npm --prefix web run build",
