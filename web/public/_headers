@@ -1,4 +1,13 @@
 # Cloudflare Pages 响应头
+
+# HTML 永远重新验证：否则部署后浏览器可能还用着旧 index.html，
+# 而它引用的 /assets/index-<旧hash>.js 已经随新部署消失 —— 页面白屏。
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
 /api/v1/*
   Content-Type: application/json; charset=utf-8
   Cache-Control: public, max-age=300, stale-while-revalidate=86400
