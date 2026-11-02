@@ -1,0 +1,103 @@
+{
+  "_comment": "复制这个文件到 web/public/api/v1/works/<work_id>.json，按字段填写，然后跑 npm run check:api。keywords / triggers 是 MCP 审查引擎的触发词，不能留空。",
+  "schema_version": "1.0",
+  "work_id": "your-work-id",
+  "title": "作品名",
+  "title_en": "Your Work",
+  "type": "original",
+  "type_label": "原创架空",
+  "category": "类型 · 风格 · 基调",
+  "author": "作者署名",
+  "tagline": "一句话钩子",
+  "summary": "两到三句话：世界观是什么、这份设定包锁死了什么。",
+  "tags": ["标签一", "标签二", "标签三"],
+  "difficulty": "medium",
+  "spoiler_warning": false,
+  "updated_at": "2026-01-01",
+  "rights_note": "版权说明：二创请注明原作者；原创建议 CC BY-NC-SA 4.0。",
+  "world_laws": [
+    {
+      "id": "law-example",
+      "title": "规则名",
+      "law": "规则本体：一句话说清不可违背的是什么。",
+      "enforcement": "写法要求：作者要怎么写才算守住这条规则。",
+      "keywords": ["越界时会出现的话", "典型违规描写"],
+      "severity": "block"
+    }
+  ],
+  "style_guide": {
+    "voice": "叙述声音与视角。",
+    "pacing": "节奏要求。",
+    "banned_words": ["禁用词一", "禁用词二"],
+    "required_terms": [{ "term": "固定术语", "note": "为什么必须这样写" }],
+    "vocabulary_notes": ["其他用词约定"]
+  },
+  "timelines": {
+    "t1": {
+      "id": "t1",
+      "label": "时期名",
+      "range": "年份或事件区间",
+      "order": 1,
+      "status_quo": "这一刻世界是什么样。",
+      "power_ceiling": "这一时期的战力 / 能力上限。",
+      "power_ceiling_triggers": ["超出上限时会出现的说法"],
+      "knowledge_boundaries": ["角色此刻知道什么、不知道什么"],
+      "forbidden_events": [
+        {
+          "id": "t1-fe1",
+          "label": "还没发生的事",
+          "because": "为什么提前写会吃书",
+          "keywords": ["触发词"],
+          "severity": "block"
+        }
+      ]
+    },
+    "t2": {
+      "id": "t2",
+      "label": "第二个时期",
+      "range": "区间",
+      "order": 2,
+      "status_quo": "……",
+      "power_ceiling": "……",
+      "power_ceiling_triggers": [],
+      "knowledge_boundaries": ["……"],
+      "forbidden_events": []
+    }
+  },
+  "characters": {
+    "character-id": {
+      "id": "character-id",
+      "name": "角色名",
+      "name_en": "Character Name",
+      "aliases": ["别称"],
+      "role": "角色定位",
+      "pathway": "等级 / 途径 / 职业",
+      "tags": ["性格标签"],
+      "drive": "核心驱动力：他要什么，为此愿意付出什么。",
+      "personality_core": ["性格内核一", "性格内核二"],
+      "speech_pattern": "语言习惯：句长、用词、情绪外露程度。",
+      "addressing_matrix": [{ "target": "另一个人", "form": "怎么称呼", "note": "可选说明" }],
+      "dialogue_samples": [
+        { "text": "典型台词", "type": "canon", "note": "正典原句" },
+        { "text": "语域仿写", "type": "style", "note": "按语域写，不冒充原文" },
+        { "text": "第三句，至少三句", "type": "style" }
+      ],
+      "ooc_taboos": [
+        { "rule": "绝对不能出现的行为", "triggers": ["出现这些话就说明写歪了"], "severity": "block" }
+      ]
+    }
+  },
+  "brainstorm_hooks": [
+    {
+      "hook_id": "h1",
+      "title": "如果……",
+      "premise": "发散前提：从哪条规则出发。",
+      "ripple_questions": ["第一阶问题", "第二阶问题", "第三阶问题"]
+    }
+  ],
+  "integration": {
+    "recommended_timeline": "t1",
+    "recommended_characters": ["character-id"],
+    "sample_audit_plot": "一段故意违规的大纲，用来演示审查工具"
+  }
+}

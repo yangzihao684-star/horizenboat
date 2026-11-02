@@ -4,7 +4,7 @@
   "base": "/api/v1",
   "work_endpoint": "/api/v1/works/{work_id}.json",
   "license": "设定摘要以 CC BY-NC-SA 4.0 授权；原著正文版权归原作者所有。",
-  "counts": { "works": 2, "characters": 8, "timelines": 6, "hooks": 6 },
+  "counts": { "works": 3, "characters": 12, "timelines": 9, "hooks": 9 },
   "tags": [
     { "tag": "西幻", "count": 1 },
     { "tag": "克苏鲁", "count": 1 },
@@ -15,7 +15,11 @@
     { "tag": "反乌托邦", "count": 1 },
     { "tag": "工程理性", "count": 1 },
     { "tag": "原创架空", "count": 1 },
-    { "tag": "群像", "count": 2 }
+    { "tag": "无限流", "count": 1 },
+    { "tag": "悬疑", "count": 1 },
+    { "tag": "规则怪谈", "count": 1 },
+    { "tag": "心理惊悚", "count": 1 },
+    { "tag": "群像", "count": 3 }
   ],
   "works": [
     {
@@ -90,6 +94,42 @@
       "spoiler_warning": false,
       "recommended_timeline": "t2",
       "updated_at": "2026-11-01"
+    },
+    {
+      "id": "echo-loop",
+      "title": "回声循环",
+      "title_en": "Echo Loop",
+      "type": "original",
+      "type_label": "原创架空",
+      "category": "无限流 · 规则怪谈 · 心理悬疑",
+      "author": "HorizonBoat 原创设定组",
+      "tags": ["无限流", "悬疑", "规则怪谈", "心理惊悚", "群像"],
+      "summary": "人死后会被丢进一个又一个「副本」，入场即分配角色位。你要做的不是改结局，而是把它演完——改了，世界会自己拐回来，并且记你一笔。",
+      "characters_list": [
+        { "id": "shen-wu", "name": "沈雾", "name_en": "Shen Wu", "aliases": ["查票的"], "role": "主角", "pathway": "角色位：查票的" },
+        { "id": "qishou-07", "name": "售票员 07", "name_en": "Conductor 07", "aliases": ["07"], "role": "引导者", "pathway": "无角色位" },
+        { "id": "lao-zhou", "name": "老周", "name_en": "Old Zhou", "aliases": ["长期乘客"], "role": "资深玩家", "pathway": "重开七次" },
+        { "id": "xiaoman", "name": "小满", "name_en": "Xiaoman", "aliases": ["丫头"], "role": "副本原住民", "pathway": "乘客（第 4 节固定座）" }
+      ],
+      "timelines_list": [
+        { "id": "t1", "label": "第一次副本 · 雨夜列车", "range": "入场第 1 夜 — 第 3 夜" },
+        { "id": "t2", "label": "第五次副本 · 空房间", "range": "第 5 次重开 — 第 6 次重开" },
+        { "id": "t3", "label": "后台", "range": "第 6 次重开之后" }
+      ],
+      "hooks_list": [
+        { "hook_id": "el-h1", "title": "如果有人把记忆全找回来" },
+        { "hook_id": "el-h2", "title": "如果小满知道自己是被生成的人格" },
+        { "hook_id": "el-h3", "title": "如果叙述者被指出" }
+      ],
+      "search_terms": [
+        "角色位", "副本", "重开", "后台", "叙述者", "结局收敛", "记忆折价", "NPC",
+        "雨夜列车", "空房间", "售票员", "查票的", "无限流", "规则怪谈"
+      ],
+      "stats": { "characters": 4, "timelines": 3, "hooks": 3, "laws": 6 },
+      "difficulty": "high",
+      "spoiler_warning": false,
+      "recommended_timeline": "t1",
+      "updated_at": "2026-11-02"
     }
   ]
 }

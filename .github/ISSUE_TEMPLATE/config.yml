@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 数据规范与贡献流程
+    url: https://github.com/yangzihao684-star/horizenboat/blob/main/CONTRIBUTING.md
+    about: 添加作品、修改字段、跑校验的完整说明
+  - name: 线上站点
+    url: https://horizenboat.online
+    about: 先看看现有作品长什么样

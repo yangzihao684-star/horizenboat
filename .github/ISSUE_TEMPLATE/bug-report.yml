@@ -1,0 +1,32 @@
+name: Bug 报告
+description: 站点、数据或 MCP Server 出问题了
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: 影响范围
+      options:
+        - 站点（页面 / 搜索 / 复制提示词）
+        - 数据（某个 work_id 的字段不对）
+        - MCP Server 工具
+        - 部署 / CI
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 发生了什么
+      description: 贴 URL、work_id，或工具名 + 参数。
+    validations:
+      required: true
+  - type: textarea
+    id: expect
+    attributes:
+      label: 你期望的结果
+  - type: input
+    id: version
+    attributes:
+      label: schema 版本 / commit
+      placeholder: 见 /api/v1/index.json 的 schema_version

@@ -1,0 +1,43 @@
+name: 收录 / 新增作品
+description: 提议把一部作品（二创或原创）放进 HorizenBoat
+title: "[作品] "
+labels: ["new-work"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: 作品名
+      placeholder: 例如：诡秘之主 / 你自己的原创世界观
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 类型
+      options:
+        - 二创防吃书（已有原作的同人）
+        - 原创架空
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 为什么它值得被锁
+      description: 这部作品最容易写歪的地方是什么？哪条规则一旦破了整篇就塌？
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: 你打算怎么切时间线
+      description: 列举 2-3 个时期，以及每个时期角色"不知道什么"。
+      placeholder: |
+        t1 开局：主角不知道 X
+        t2 中盘：主角知道了 X，但不知道 Y
+  - type: checkboxes
+    id: readiness
+    attributes:
+      label: 提交前确认
+      options:
+        - label: 我读过 CONTRIBUTING.md 的数据规范
+        - label: 二创内容已注明原作者，且不包含原文正文
